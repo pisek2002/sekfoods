@@ -11,6 +11,8 @@ class Authen extends StatefulWidget {
 }
 
 class _AuthenState extends State<Authen> {
+  bool ststusRedEye = true;
+
   @override
   Widget build(BuildContext context) {
     // ignore: unused_local_variable
@@ -25,21 +27,128 @@ class _AuthenState extends State<Authen> {
           children: [
             buildImage(size),
             buildAppName(),
+            buildUser(size),
+            buildPassword(size),
           ],
         ),
       ),
     );
   }
 
-  Row buildAppName() {
-    return Row(mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ShowTitle(
-                title: MyConstant.appName,
-                textStyle: MyConstant().h1Style(),
+  Row buildUser(double size) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        // ignore: sized_box_for_whitespace
+        // ignore: prefer_const_constructors
+        Container(
+          // ignore: prefer_const_constructors
+          margin: EdgeInsets.only(
+            top: 16,
+          ),
+          width: size * 0.70,
+          // ignore: prefer_const_constructors
+          child: TextFormField(keyboardType: TextInputType.emailAddress,
+            // ignore: prefer_const_constructors
+            decoration: InputDecoration(
+              labelStyle: MyConstant().h3Style(),
+              labelText: 'User :',
+              // ignore: prefer_const_constructors
+              prefixIcon: Icon(
+                Icons.account_circle_outlined,
+                color: MyConstant.dark,
               ),
-            ],
-          );
+              // ignore: prefer_const_constructors
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: MyConstant.dark,
+                ),
+                borderRadius: BorderRadius.circular(30),
+              ),
+              // ignore: prefer_const_constructors
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: MyConstant.light,
+                ),
+                borderRadius: BorderRadius.circular(30),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Row buildPassword(double size) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        // ignore: sized_box_for_whitespace
+        // ignore: prefer_const_constructors
+        Container(
+          // ignore: prefer_const_constructors
+          margin: EdgeInsets.only(
+            top: 16,
+          ),
+          width: size * 0.70,
+          // ignore: prefer_const_constructors
+          child: TextFormField(keyboardType: TextInputType.emailAddress,
+            obscureText: ststusRedEye,
+            // ignore: prefer_const_constructors
+            decoration: InputDecoration(
+              suffixIcon: IconButton(
+                onPressed: () {
+                  setState(() {
+                    ststusRedEye = !ststusRedEye;
+                  });
+                  // ignore: prefer_const_constructors
+                },
+                icon: ststusRedEye ? Icon(
+                  Icons.remove_red_eye,
+                  color: MyConstant.dark,
+                ) :Icon(
+                  Icons.remove_red_eye_outlined,
+                  color: MyConstant.dark,
+                ) ,
+              ),
+              labelStyle: MyConstant().h3Style(),
+              labelText: 'Password :',
+              // ignore: prefer_const_constructors
+              prefixIcon: Icon(
+                Icons.lock_outlined,
+                color: MyConstant.dark,
+              ),
+              // ignore: prefer_const_constructors
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: MyConstant.dark,
+                ),
+                borderRadius: BorderRadius.circular(30),
+              ),
+              // ignore: prefer_const_constructors
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: MyConstant.light,
+                ),
+                borderRadius: BorderRadius.circular(30),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Row buildAppName() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ShowTitle(
+          title: MyConstant.appName,
+          textStyle: MyConstant().h1Style(),
+        ),
+      ],
+    );
   }
 
   Row buildImage(double size) {
@@ -49,7 +158,7 @@ class _AuthenState extends State<Authen> {
       children: [
         // ignore: sized_box_for_whitespace
         Container(
-          width: size * 0.75,
+          width: size * 0.70,
           child: ShowImage(path: MyConstant.image1),
         ),
       ],

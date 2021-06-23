@@ -23,15 +23,43 @@ class _AuthenState extends State<Authen> {
       body: SafeArea(
         // ignore: avoid_unnecessary_containers
         // ignore: sized_box_for_whitespace
-        child: ListView(
-          children: [
-            buildImage(size),
-            buildAppName(),
-            buildUser(size),
-            buildPassword(size),
-          ],
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).requestFocus(
+            FocusNode(),
+          ),
+          behavior: HitTestBehavior.opaque,
+          child: ListView(
+            children: [
+              buildImage(size),
+              buildAppName(),
+              buildUser(size),
+              buildPassword(size),
+              buildLogin(size),
+            ],
+          ),
         ),
       ),
+    );
+  }
+
+  Row buildLogin(double size) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          // ignore: prefer_const_constructors
+          margin: EdgeInsets.symmetric(
+            vertical: 16,
+          ),
+          width: size * 0.6,
+          child: ElevatedButton(
+            style: MyConstant().myButtonStyle(),
+            onPressed: () {},
+            // ignore: prefer_const_constructors
+            child: Text('Login'),
+          ),
+        ),
+      ],
     );
   }
 
@@ -46,9 +74,10 @@ class _AuthenState extends State<Authen> {
           margin: EdgeInsets.only(
             top: 16,
           ),
-          width: size * 0.70,
+          width: size * 0.6,
           // ignore: prefer_const_constructors
-          child: TextFormField(keyboardType: TextInputType.emailAddress,
+          child: TextFormField(
+            keyboardType: TextInputType.emailAddress,
             // ignore: prefer_const_constructors
             decoration: InputDecoration(
               labelStyle: MyConstant().h3Style(),
@@ -90,9 +119,9 @@ class _AuthenState extends State<Authen> {
           margin: EdgeInsets.only(
             top: 16,
           ),
-          width: size * 0.70,
+          width: size * 0.6,
           // ignore: prefer_const_constructors
-          child: TextFormField(keyboardType: TextInputType.emailAddress,
+          child: TextFormField(
             obscureText: ststusRedEye,
             // ignore: prefer_const_constructors
             decoration: InputDecoration(
@@ -103,13 +132,15 @@ class _AuthenState extends State<Authen> {
                   });
                   // ignore: prefer_const_constructors
                 },
-                icon: ststusRedEye ? Icon(
-                  Icons.remove_red_eye,
-                  color: MyConstant.dark,
-                ) :Icon(
-                  Icons.remove_red_eye_outlined,
-                  color: MyConstant.dark,
-                ) ,
+                icon: ststusRedEye
+                    ? Icon(
+                        Icons.remove_red_eye,
+                        color: MyConstant.dark,
+                      )
+                    : Icon(
+                        Icons.remove_red_eye_outlined,
+                        color: MyConstant.dark,
+                      ),
               ),
               labelStyle: MyConstant().h3Style(),
               labelText: 'Password :',
@@ -158,7 +189,7 @@ class _AuthenState extends State<Authen> {
       children: [
         // ignore: sized_box_for_whitespace
         Container(
-          width: size * 0.70,
+          width: size * 0.6,
           child: ShowImage(path: MyConstant.image1),
         ),
       ],

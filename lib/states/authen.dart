@@ -35,10 +35,28 @@ class _AuthenState extends State<Authen> {
               buildUser(size),
               buildPassword(size),
               buildLogin(size),
+              buildCreateAccount(),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Row buildCreateAccount() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ShowTitle(
+          title: 'ยังไม่ได้สมัครสมาชิก ?',
+          textStyle: MyConstant().h3Style(),
+        ),
+        TextButton(
+          onPressed: ()=>Navigator.pushNamed(context, MyConstant.routerCreateAccount),
+          // ignore: prefer_const_constructors
+          child: Text('สมัครสมาชิกที่นี้'),
+        ),
+      ],
     );
   }
 

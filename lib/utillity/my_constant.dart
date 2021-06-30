@@ -16,6 +16,7 @@ class MyConstant {
   static String image2 = 'images/delivery2.png';
   static String image3 = 'images/delivery3.png';
   static String image4 = 'images/delivery4.png';
+  static String avatar = 'images/avatar.png';
 
   // Color
   // ignore: prefer_const_constructors

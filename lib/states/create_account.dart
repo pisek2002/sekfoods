@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sekfoods/utillity/my_constant.dart';
+import 'package:sekfoods/utillity/my_dialog.dart';
 import 'package:sekfoods/widgets/show_image.dart';
 import 'package:sekfoods/widgets/show_title.dart';
 
@@ -16,6 +18,32 @@ class CreateAccount extends StatefulWidget {
 class _CreateAccountState extends State<CreateAccount> {
   String? typeUser;
   File? file;
+
+  @override
+  void initState() {
+    // ignore: todo
+    // TODO: implement initState
+    super.initState();
+    findLatLng();
+  }
+
+  // ignore: prefer_void_to_null
+  Future<Null> findLatLng() async {
+    bool locationService;
+    // ignore: unused_local_variable
+    LocationPermission locationPermission;
+
+    locationService = await Geolocator.isLocationServiceEnabled();
+    if (locationService) {
+      // ignore: avoid_print
+      print('Service Location Open');
+    } else {
+      // ignore: avoid_print
+      print('Service Location Close');
+      MyDialog().alertLocationService(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double size = MediaQuery.of(context).size.width;
@@ -64,7 +92,7 @@ class _CreateAccountState extends State<CreateAccount> {
       setState(() {
         file = File(result!.path);
       });
-    // ignore: empty_catches
+      // ignore: empty_catches
     } catch (e) {}
   }
 

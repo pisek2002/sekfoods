@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:sekfoods/utillity/my_constant.dart';
 import 'package:sekfoods/utillity/my_dialog.dart';
 import 'package:sekfoods/widgets/show_image.dart';
+import 'package:sekfoods/widgets/show_progress.dart';
 import 'package:sekfoods/widgets/show_title.dart';
 
 class CreateAccount extends StatefulWidget {
@@ -18,17 +19,18 @@ class CreateAccount extends StatefulWidget {
 class _CreateAccountState extends State<CreateAccount> {
   String? typeUser;
   File? file;
+  double? lat, lng;
 
   @override
   void initState() {
     // ignore: todo
     // TODO: implement initState
     super.initState();
-    findLatLng();
+    checkPermission();
   }
 
   // ignore: prefer_void_to_null
-  Future<Null> findLatLng() async {
+  Future<Null> checkPermission() async {
     bool locationService;
     // ignore: unused_local_variable
     LocationPermission locationPermission;
@@ -37,10 +39,54 @@ class _CreateAccountState extends State<CreateAccount> {
     if (locationService) {
       // ignore: avoid_print
       print('Service Location Open');
+
+      locationPermission = await Geolocator.checkPermission();
+      if (locationPermission == LocationPermission.denied) {
+        locationPermission = await Geolocator.requestPermission();
+        if (locationPermission == LocationPermission.deniedForever) {
+          MyDialog().alertLocationService(
+              context, 'ไม่อนุญาติแชร์ Location', 'โปรดแชร์ Location');
+        } else {
+          // File LatLong
+          findLatLng();
+        }
+      } else {
+        if (locationPermission == LocationPermission.deniedForever) {
+          MyDialog().alertLocationService(
+              context, 'ไม่อนุญาติแชร์ Location', 'โปรดแชร์ Location');
+        } else {
+          // File LatLong
+          findLatLng();
+        }
+      }
     } else {
       // ignore: avoid_print
       print('Service Location Close');
-      MyDialog().alertLocationService(context);
+      MyDialog().alertLocationService(context, 'Location Service ปิดอยู่ ?',
+          'กรุณาเปิด Location Service ด้วยค่ะ');
+    }
+  }
+
+  // ignore: prefer_void_to_null
+  Future<Null> findLatLng() async {
+    // ignore: avoid_print
+    print('findLatLng == Working');
+    Position? position = await findPosition();
+    setState(() {
+      lat = position!.latitude;
+      lng = position.longitude;
+      // ignore: avoid_print
+      print('lat =$lat,lng =$lng');
+    });
+  }
+
+  Future<Position?> findPosition() async {
+    Position position;
+    try {
+      position = await Geolocator.getCurrentPosition();
+      return position;
+    } catch (e) {
+      return null;
     }
   }
 
@@ -77,11 +123,25 @@ class _CreateAccountState extends State<CreateAccount> {
             buildTitle('รูปภาพ'),
             //buildSubTitle(),
             buildAvatar(size),
+            buildTitle('แสดงพิกัดทีคุณอยู่'),
+            buildMap(),
           ],
         ),
       ),
     );
   }
+
+  // ignore: avoid_unnecessary_containers
+  // ignore: sized_box_for_whitespace
+  // ignore: prefer_const_constructors
+  Widget buildMap() => Container(
+        // ignore: prefer_const_constructors
+        margin: EdgeInsets.symmetric(horizontal: 70, vertical: 20),
+        width: double.infinity,
+        height: 200,
+        // ignore: prefer_const_constructors
+        child: lat == null ? ShowProgress() : Text('lat =$lat,lng =$lng'),
+      );
 
   // ignore: prefer_void_to_null
   Future<Null> chooseImage(ImageSource source) async {
@@ -105,7 +165,7 @@ class _CreateAccountState extends State<CreateAccount> {
         Container(
           // ignore: prefer_const_constructors
           margin: EdgeInsets.symmetric(
-            vertical: 28,
+            vertical: 30,
             horizontal: 10,
           ),
           child: IconButton(
@@ -113,7 +173,7 @@ class _CreateAccountState extends State<CreateAccount> {
             // ignore: prefer_const_constructors
             icon: Icon(
               Icons.add_a_photo,
-              size: 36,
+              size: 28,
               color: MyConstant.dark,
             ),
           ),
@@ -142,7 +202,7 @@ class _CreateAccountState extends State<CreateAccount> {
             // ignore: prefer_const_constructors
             icon: Icon(
               Icons.add_photo_alternate,
-              size: 36,
+              size: 28,
               color: MyConstant.dark,
             ),
           ),
@@ -271,7 +331,7 @@ class _CreateAccountState extends State<CreateAccount> {
           margin: EdgeInsets.only(
             top: 16,
           ),
-          width: size * 0.7,
+          width: size * 0.6,
           // ignore: prefer_const_constructors
           child: TextFormField(
             keyboardType: TextInputType.emailAddress,
@@ -316,7 +376,7 @@ class _CreateAccountState extends State<CreateAccount> {
           margin: EdgeInsets.only(
             top: 16,
           ),
-          width: size * 0.7,
+          width: size * 0.6,
           // ignore: prefer_const_constructors
           child: TextFormField(
             maxLines: 4,
@@ -365,7 +425,7 @@ class _CreateAccountState extends State<CreateAccount> {
           margin: EdgeInsets.only(
             top: 16,
           ),
-          width: size * 0.7,
+          width: size * 0.6,
           // ignore: prefer_const_constructors
           child: TextFormField(
             keyboardType: TextInputType.phone,
@@ -410,7 +470,7 @@ class _CreateAccountState extends State<CreateAccount> {
           margin: EdgeInsets.only(
             top: 16,
           ),
-          width: size * 0.7,
+          width: size * 0.6,
           // ignore: prefer_const_constructors
           child: TextFormField(
             keyboardType: TextInputType.emailAddress,
@@ -455,7 +515,7 @@ class _CreateAccountState extends State<CreateAccount> {
           margin: EdgeInsets.only(
             top: 16,
           ),
-          width: size * 0.7,
+          width: size * 0.6,
           // ignore: prefer_const_constructors
           child: TextFormField(
             keyboardType: TextInputType.emailAddress,

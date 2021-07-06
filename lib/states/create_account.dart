@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sekfoods/utillity/my_constant.dart';
 import 'package:sekfoods/utillity/my_dialog.dart';
@@ -131,16 +132,39 @@ class _CreateAccountState extends State<CreateAccount> {
     );
   }
 
+  // ignore: non_constant_identifier_names
+  // ignore: prefer_collection_literals
+  Set<Marker> setMarker() => <Marker>[
+        // ignore: prefer_const_constructors
+        Marker(
+          // ignore: prefer_const_constructors
+          markerId: MarkerId('id'),
+          position: LatLng(lat!, lng!),
+          // ignore: prefer_const_constructors
+          infoWindow: InfoWindow(title: 'คุณอยู่ที่นี้',snippet: 'lat = $lat, lng = $lng'),
+        ),
+      ].toSet();
+
   // ignore: avoid_unnecessary_containers
   // ignore: sized_box_for_whitespace
   // ignore: prefer_const_constructors
   Widget buildMap() => Container(
         // ignore: prefer_const_constructors
-        margin: EdgeInsets.symmetric(horizontal: 70, vertical: 20),
+        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         width: double.infinity,
-        height: 200,
+        height: 300,
         // ignore: prefer_const_constructors
-        child: lat == null ? ShowProgress() : Text('lat =$lat,lng =$lng'),
+        child: lat == null
+            // ignore: prefer_const_constructors
+            ? ShowProgress()
+            : GoogleMap(
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(lat!, lng!),
+                  zoom: 16,
+                ),
+                onMapCreated: (controller) {},
+                markers: setMarker(),
+              ),
       );
 
   // ignore: prefer_void_to_null
@@ -173,7 +197,7 @@ class _CreateAccountState extends State<CreateAccount> {
             // ignore: prefer_const_constructors
             icon: Icon(
               Icons.add_a_photo,
-              size: 28,
+              size: 36,
               color: MyConstant.dark,
             ),
           ),
@@ -194,7 +218,7 @@ class _CreateAccountState extends State<CreateAccount> {
         Container(
           // ignore: prefer_const_constructors
           margin: EdgeInsets.symmetric(
-            vertical: 28,
+            vertical: 36,
             horizontal: 10,
           ),
           child: IconButton(

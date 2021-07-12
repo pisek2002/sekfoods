@@ -8,7 +8,8 @@ import 'package:sekfoods/widgets/show_title.dart';
 
 class MyDialog {
   // ignore: prefer_void_to_null
-  Future<Null> alertLocationService(BuildContext context,String title,String message ) async {
+  Future<Null> alertLocationService(
+      BuildContext context, String title, String message) async {
     showDialog(
       context: context,
       // ignore: prefer_const_constructors
@@ -34,6 +35,34 @@ class MyDialog {
               await Geolocator.openLocationSettings();
               exit(0);
             },
+            // ignore: prefer_const_constructors
+            child: Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ignore: prefer_void_to_null
+  Future<Null> normalDilog(
+      BuildContext context, String title, String message) async {
+    showDialog(
+      context: context,
+      // ignore: prefer_const_constructors
+      builder: (context) => SimpleDialog(
+        title: ListTile(
+          leading: ShowImage(
+            path: MyConstant.image2,
+          ),
+          title: ShowTitle(title: title, textStyle: MyConstant().h2Style()),
+          subtitle: ShowTitle(
+            title: message,
+            textStyle: MyConstant().h3Style(),
+          ),
+        ),
+        children: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
             // ignore: prefer_const_constructors
             child: Text('OK'),
           ),

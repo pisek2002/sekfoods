@@ -21,6 +21,7 @@ class _CreateAccountState extends State<CreateAccount> {
   String? typeUser;
   File? file;
   double? lat, lng;
+  final formkey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -95,7 +96,11 @@ class _CreateAccountState extends State<CreateAccount> {
   Widget build(BuildContext context) {
     double size = MediaQuery.of(context).size.width;
     return Scaffold(
+      // ignore: prefer_const_constructors
       appBar: AppBar(
+        actions: [
+          buildCreateNewAccount(),
+        ],
         backgroundColor: MyConstant.primary,
         // ignore: prefer_const_constructors
         title: Text('สมัครสมาชิก'),
@@ -107,28 +112,54 @@ class _CreateAccountState extends State<CreateAccount> {
           FocusNode(),
         ),
         behavior: HitTestBehavior.opaque,
-        child: ListView(
-          // ignore: prefer_const_literals_to_create_immutables
-          children: [
-            buildData(),
-            // ignore: prefer_const_constructors
-            buildName(size),
-            buildAddress(size),
-            buildPhoneNumber(size),
-            buildUser(size),
-            buildPassword(size),
-            buildTitle('เลือกสมัครสมาชิกตามชนิด'),
-            buildRadioBuyer(size),
-            buildRadioSeller(size),
-            buildRadioRider(size),
-            buildTitle('รูปภาพ'),
-            //buildSubTitle(),
-            buildAvatar(size),
-            buildTitle('แสดงพิกัดทีคุณอยู่'),
-            buildMap(),
-          ],
+        child: Form(
+          key: formkey,
+          child: SingleChildScrollView(
+            child: Column(
+              // ignore: prefer_const_literals_to_create_immutables
+              children: [
+                buildData(),
+                // ignore: prefer_const_constructors
+                buildName(size),
+                buildAddress(size),
+                buildPhoneNumber(size),
+                buildUser(size),
+                buildPassword(size),
+                buildTitle('เลือกสมัครสมาชิกตามชนิด'),
+                buildRadioBuyer(size),
+                buildRadioSeller(size),
+                buildRadioRider(size),
+                buildTitle('รูปภาพ'),
+                buildAvatar(size),
+                buildTitle('แสดงพิกัดทีคุณอยู่'),
+                buildMap(),
+              ],
+            ),
+          ),
         ),
       ),
+    );
+  }
+
+  IconButton buildCreateNewAccount() {
+    return IconButton(
+      onPressed: () {
+        if (formkey.currentState!.validate()) {
+          if (typeUser == null) {
+            // ignore: avoid_print
+            print('Non Type User');
+            MyDialog().normalDilog(
+                context,
+                'ยังไม่ได้เลือกประเภทของผู้สมัครสมาชิก',
+                'กรุณาเลือกชนิดของผู้สมัครด้วยค่ะ');
+          } else {
+            // ignore: avoid_print
+            print('Process Insert of Database');
+          }
+        }
+      },
+      // ignore: prefer_const_constructors
+      icon: Icon(Icons.cloud_upload),
     );
   }
 
@@ -141,7 +172,8 @@ class _CreateAccountState extends State<CreateAccount> {
           markerId: MarkerId('id'),
           position: LatLng(lat!, lng!),
           // ignore: prefer_const_constructors
-          infoWindow: InfoWindow(title: 'คุณอยู่ที่นี้',snippet: 'lat = $lat, lng = $lng'),
+          infoWindow: InfoWindow(
+              title: 'คุณอยู่ที่นี้', snippet: 'lat = $lat, lng = $lng'),
         ),
       ].toSet();
 
@@ -358,6 +390,11 @@ class _CreateAccountState extends State<CreateAccount> {
           width: size * 0.6,
           // ignore: prefer_const_constructors
           child: TextFormField(
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'กรุณาใส่ ชื่อให้เรียบร้อยด้วยค่ะ';
+              } else {}
+            },
             keyboardType: TextInputType.emailAddress,
             // ignore: prefer_const_constructors
             decoration: InputDecoration(
@@ -403,6 +440,11 @@ class _CreateAccountState extends State<CreateAccount> {
           width: size * 0.6,
           // ignore: prefer_const_constructors
           child: TextFormField(
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'กรุณาใส่ที่อยู่ให้เรียบร้อยด้วยค่ะ';
+              } else {}
+            },
             maxLines: 4,
             keyboardType: TextInputType.emailAddress,
             // ignore: prefer_const_constructors
@@ -452,6 +494,11 @@ class _CreateAccountState extends State<CreateAccount> {
           width: size * 0.6,
           // ignore: prefer_const_constructors
           child: TextFormField(
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'กรุณาใส่หมายเลขโทรศัพท์ให้เรียบร้อยด้วยค่ะ';
+              } else {}
+            },
             keyboardType: TextInputType.phone,
             // ignore: prefer_const_constructors
             decoration: InputDecoration(
@@ -497,6 +544,11 @@ class _CreateAccountState extends State<CreateAccount> {
           width: size * 0.6,
           // ignore: prefer_const_constructors
           child: TextFormField(
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'กรุณาใส่ USER ให้เรียบร้อยด้วยค่ะ';
+              } else {}
+            },
             keyboardType: TextInputType.emailAddress,
             // ignore: prefer_const_constructors
             decoration: InputDecoration(
@@ -542,6 +594,11 @@ class _CreateAccountState extends State<CreateAccount> {
           width: size * 0.6,
           // ignore: prefer_const_constructors
           child: TextFormField(
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'กรุณาใส่ Password ด้วยค่ะ';
+              } else {}
+            },
             keyboardType: TextInputType.emailAddress,
             // ignore: prefer_const_constructors
             decoration: InputDecoration(
